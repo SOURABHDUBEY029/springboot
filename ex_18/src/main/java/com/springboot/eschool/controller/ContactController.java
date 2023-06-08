@@ -2,6 +2,7 @@ package com.springboot.eschool.controller;
 
 import com.springboot.eschool.model.Contact;
 import com.springboot.eschool.service.ContactService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,14 @@ public class ContactController {
     }
 
     @RequestMapping(value="/saveMsg", method = POST)
-    public String saveMessage(@ModelAttribute("contact") Contact contact, Errors errors){
+    public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors){
         if(errors.hasErrors()){
             log.error("Contact form validation restricted due to : " + errors.toString());
             return "contact.html";
         }
         contactService.saveMessageService(contact);
+        contactService.setCounter(contactService.getCounter()+1);
+        log.info("Number of times the form submitted is : " + contactService.getCounter());
         return "redirect:/contact";
     }
 }
