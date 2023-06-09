@@ -13,7 +13,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @Service
 //@RequestScope
 //@SessionScope
-@ApplicationScope
+//@ApplicationScope
 public class ContactService {
 
 //    private static Logger log = LoggerFactory.getLogger(ContactService.class);
