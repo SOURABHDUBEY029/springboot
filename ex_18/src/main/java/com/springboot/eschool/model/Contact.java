@@ -1,5 +1,6 @@
 package com.springboot.eschool.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -8,8 +9,10 @@ import lombok.Data;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Data
+//@Entity
+public class Contact extends BaseEntity {
 
-public class Contact {
+    private int contactId;
 
     @NotBlank(message = "Name must not be blank")
     @Size(min = 3, message = "Name must be at least 3 character long")
@@ -31,5 +34,7 @@ public class Contact {
     @NotBlank(message = "Message must not be blank")
     @Size(min = 10, message = "Message must be at least 10 charcter long")
     private String message;
+
+    private String status;
 
 }

@@ -1,5 +1,6 @@
 package com.springboot.eschool.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,9 +25,11 @@ public class ProjectSecurityConfig {
 //        http.formLogin();
 //        http.httpBasic();
 
-        http.csrf().disable()
+        http.csrf().ignoringRequestMatchers("/saveMsg") .ignoringRequestMatchers(PathRequest.toH2Console()).and()
                 .authorizeHttpRequests()
                 .requestMatchers("/dashboard").authenticated()
+                .requestMatchers("/displayMessages").hasRole("ADMIN")
+                .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                 .requestMatchers("", "/", "/home").permitAll()
                 .requestMatchers("/holidays/**").permitAll()
                 .requestMatchers("/contact").permitAll()
@@ -34,10 +37,18 @@ public class ProjectSecurityConfig {
                 .requestMatchers("/courses").permitAll()
                 .requestMatchers("/about").permitAll()
                 .requestMatchers("/assets/**").permitAll()
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/logout").permitAll()
+                .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll()
                 .and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers(PathRequest.toH2Console()).permitAll()
                 .and().httpBasic();
+
+                http.headers().frameOptions().disable();
+
         return http.build();
     }
 
@@ -52,7 +63,7 @@ public class ProjectSecurityConfig {
         UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("654321")
-                .roles("USER", "ADMIN")
+                .roles("ADMIN")
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin);
