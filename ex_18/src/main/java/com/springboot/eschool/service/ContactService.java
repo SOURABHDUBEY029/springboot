@@ -21,8 +21,8 @@ public class ContactService {
     public boolean saveMessageService(Contact contact){
         boolean isSaved = false;
         contact.setStatus(ESchoolConstants.OPEN);
-        contact.setCreatedBy(ESchoolConstants.ANONYMOUS);
-        contact.setCreatedAt(LocalDateTime.now());
+//        contact.setCreatedBy(ESchoolConstants.ANONYMOUS);
+//        contact.setCreatedAt(LocalDateTime.now());
 
         Contact savedContact = contactRepository.save(contact);
         if(savedContact != null && savedContact.getContactId() > 0){
@@ -38,14 +38,14 @@ public class ContactService {
         return contactMsgs;
     }
 
-    public boolean updateMsgStatus(int id, String updatedBy){
+    public boolean updateMsgStatus(int id){
         boolean isUpdated = false;
 //        int result = contactRepository.updateMsgStatus(id, ESchoolConstants.CLOSE, updatedBy);
         Optional<Contact> contact = contactRepository.findById(id);
         contact.ifPresent(contact1 -> {
             contact1.setStatus(ESchoolConstants.CLOSE);
-            contact1.setUpdatedBy(updatedBy);
-            contact1.setUpdatedAt(LocalDateTime.now());
+//            contact1.setUpdatedBy(updatedBy);
+//            contact1.setUpdatedAt(LocalDateTime.now());
         });
         Contact updatedContact = contactRepository.save(contact.get());
         if(updatedContact != null && updatedContact.getUpdatedBy() != null){
